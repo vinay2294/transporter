@@ -162,6 +162,9 @@ func updateMsg(m message.Msg, s *sql.DB) error {
 func primaryKeys(namespace string, db *sql.DB) (primaryKeys map[string]bool, err error) {
 	primaryKeys = map[string]bool{}
 	namespaceArray := strings.SplitN(namespace, ".", 2)
+	if len(namespaceArray) == 1 {
+		namespaceArray = append(namespaceArray, "")
+	}
 	var (
 		tableSchema string
 		tableName   string
