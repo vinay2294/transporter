@@ -37,6 +37,6 @@ func (p *prettify) Apply(msg message.Msg) (message.Msg, error) {
 	if p.Spaces > 0 {
 		b, _ = json.MarshalIndent(d, "", strings.Repeat(" ", p.Spaces))
 	}
-	log.Debugf("\n%s", string(b))
+	log.Infof("\n%s", string(b))
 	return msg, nil
 }

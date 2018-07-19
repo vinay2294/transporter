@@ -66,7 +66,7 @@ func (r *Reader) Read(resumeMap map[string]client.MessageSet, filterFn client.Ns
 			var wg sync.WaitGroup
 			for _, c := range collections {
 				var lastID interface{}
-				oplogTime := timeAsMongoTimestamp(time.Now())
+				oplogTime := timeAsMongoTimestamp(time.Unix(time.Now().Unix()<<32, 0))
 				var mode commitlog.Mode // default to Copy
 				if m, ok := resumeMap[c]; ok {
 					lastID = m.Msg.Data().Get("_id")
@@ -74,7 +74,7 @@ func (r *Reader) Read(resumeMap map[string]client.MessageSet, filterFn client.Ns
 					oplogTime = timeAsMongoTimestamp(time.Unix(m.Timestamp, 0))
 				}
 				if mode == commitlog.Copy {
-					if err := r.iterateCollection(r.iterate(lastID, session.Copy(), c), out, done, int64(oplogTime)>>32); err != nil {
+					if err := r.iterateCollection(r.iterate(lastID, session.Copy(), c), out, done, int64(oplogTime)); err != nil {
 						log.With("db", session.DB("").Name).Errorln(err)
 						return
 					}
@@ -274,7 +274,7 @@ func (r *Reader) tailCollection(c string, mgoSession *mgo.Session, oplogTime bso
 						}
 
 						msg := message.From(op, c, data.Data(doc)).(*message.Base)
-						msg.TS = int64(result.Ts) >> 32
+						msg.TS = int64(result.Ts)
 
 						out <- client.MessageSet{
 							Msg:       msg,
@@ -344,5 +344,5 @@ func (o *oplogDoc) validOp(ns string) bool {
 }
 
 func timeAsMongoTimestamp(t time.Time) bson.MongoTimestamp {
-	return bson.MongoTimestamp(t.Unix() << 32)
+	return bson.MongoTimestamp(t.Unix())
 }
