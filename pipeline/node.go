@@ -514,6 +514,13 @@ type writeResult struct {
 }
 
 func (n *Node) write(msg message.Msg, off offset.Offset) (message.Msg, error) {
+	if msg.Confirms() != nil {
+		n.offsetLock.Lock()
+		if len(n.pendingOffsets) == 0 {
+			n.om.CommitOffset(off, false)
+		}
+		n.offsetLock.Unlock()
+	}
 	if !n.nsFilter.MatchString(msg.Namespace()) {
 		n.l.With("ns", msg.Namespace()).Debugln("message skipped by namespace filter")
 		if msg.Confirms() != nil {
