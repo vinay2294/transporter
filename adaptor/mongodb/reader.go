@@ -237,7 +237,7 @@ func (r *Reader) tailCollection(c string, mgoSession *mgo.Session, oplogTime bso
 			result     oplogDoc // hold the document
 			db         = mgoSession.DB("").Name
 			ns         = fmt.Sprintf("%s.%s", db, c)
-			query      = bson.M{"ns": ns, "ts": bson.M{"$gte": oplogTime}}
+			query      = bson.M{"ns": ns, "ts": bson.M{"$gt": oplogTime}}
 			iter       = collection.Find(query).LogReplay().Sort("$natural").Tail(r.oplogTimeout)
 		)
 		defer iter.Close()
