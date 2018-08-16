@@ -20,7 +20,7 @@ func newWriter() *Writer {
 	w := &Writer{}
 	w.writeMap = map[ops.Op]func(message.Msg, *mgo.Collection) error{
 		ops.Insert: insertMsg,
-		ops.Update: updateMsg,
+		ops.Update: insertMsg,
 		ops.Delete: deleteMsg,
 	}
 	return w

@@ -36,7 +36,7 @@ func NewLogManager(path, name string) (*LogManager, error) {
 
 	l, err := commitlog.New(
 		commitlog.WithPath(filepath.Join(path, fmt.Sprintf("%s-%s", offsetPrefixDir, name))),
-		commitlog.WithMaxSegmentBytes(5*1024*1024),
+		commitlog.WithMaxSegmentBytes(100*1024*1024),
 	)
 	if err != nil {
 		return nil, err
