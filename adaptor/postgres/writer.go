@@ -24,7 +24,7 @@ func newWriter() *Writer {
 	w := &Writer{}
 	w.writeMap = map[ops.Op]func(message.Msg, *sql.DB) error{
 		ops.Insert: insertMsg,
-		ops.Update: updateMsg,
+		ops.Update: insertMsg,
 		ops.Delete: deleteMsg,
 	}
 	return w

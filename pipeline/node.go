@@ -532,7 +532,9 @@ func (n *Node) write(msg message.Msg, off offset.Offset) (message.Msg, error) {
 		}
 		return msg, nil
 	}
+	// fmt.Println("pre msg %s", msg)
 	msg, err := n.applyTransforms(msg)
+	// fmt.Println("post msg %s", msg)
 	if err != nil {
 		return nil, err
 	} else if msg == nil {
@@ -562,7 +564,7 @@ func (n *Node) write(msg message.Msg, off offset.Offset) (message.Msg, error) {
 		}
 		m, err := client.Write(n.c, n.writer, msg)
 		if err != nil {
-			n.l.Errorf("write error, %s", err)
+			n.l.Errorf("write error, %s", err, msg)
 		}
 		c <- writeResult{m, err}
 	}()
