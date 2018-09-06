@@ -12,16 +12,16 @@ var source = mongodb({
 })
 
 var sink = postgres({
-  "uri": "postgres://paytm_travel:Paytm$Travel@mongo-transactions.cyufiargq8ua.ap-southeast-1.rds.amazonaws.com:5432/flights?sslmode=false",
+  "uri": "postgres://plplatform-postgres01.travel.paytm:5432/flights?sslmode=false",
   "ssl": false,
   "debug": true,
   "tail": true,
   // "replication_slot": "slot"
 })
 
-t.Config({"log_dir":"/home/vinay_16168/vinay/transporter-pipeline/offsets/", "compaction_interval": "600s", "max_segment_bytes": 50000000})
+t.Config({"log_dir":"./offsets/", "compaction_interval": "600s", "max_segment_bytes": 50000000})
 .Source("source", source, "flights.items")
-.Transform(goja({"filename":"/home/vinay_16168/vinay/transporter-pipeline/transforms/prod_transform_flights.js"}))
+.Transform(goja({"filename":"./transforms/prod_transform_flights.js"}))
 // - enable it to print transformed output
 // .Transform(pretty({"spaces":0}))
 .Save("sink", sink, "flights.items")

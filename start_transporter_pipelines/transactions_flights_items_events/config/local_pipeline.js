@@ -12,9 +12,9 @@ var sink = postgres({
   "tail": true,
 })
 
-t.Config({"log_dir":"/Users/vinaykumar/go/bin/offsets/", "compaction_interval": "30s", "max_segment_bytes": 2000000})
+t.Config({"log_dir":"./offsets/", "compaction_interval": "30s", "max_segment_bytes": 2000000})
 .Source("source", source, "flights.items")
-.Transform(goja({"filename":"/Users/vinaykumar/go/bin/local_transform_flights.js"}))
+.Transform(goja({"filename":"./transforms/local_transform_flights.js"}))
 .Save("sink", sink, "flights.items")
 
 
