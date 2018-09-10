@@ -3,3 +3,5 @@
 /pipeline.js
 /transformer.js
 .vscode
+start_transporter_pipelines/transactions_flights_items_events/offsets/
+cmd/transporter/debug
