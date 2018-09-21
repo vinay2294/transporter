@@ -481,6 +481,10 @@ function transform(doc) {
 						schema[keys[i]] = emptySchema[keys[i]];
 						continue;
 					}
+					if(schemadef[keys[i]] === "int" || schemadef[keys[i]] === "bigint") {
+						schema[keys[i]] = Number(schema[keys[i]]);
+						schema[keys[i]] = parseInt(schema[keys[i]]);
+					}
 					continue;
 				} else if(typeof(schema[keys[i]]) === "object" && (schemadef[keys[i]] === "int" || schemadef[keys[i]] === "bigint" || schemadef[keys[i]] === "double")) {
 					try {
@@ -489,6 +493,9 @@ function transform(doc) {
 							schema.etl_parse_errors += ":: " + "NaN value on key " + keys[i];
 							schema[keys[i]] = emptySchema[keys[i]];
 							continue;
+						}
+						if(schemadef[keys[i]] === "int" || schemadef[keys[i]] === "bigint") {
+							schema[keys[i]] = parseInt(schema[keys[i]]);
 						}
 					} catch(err) {
 						if(err) { schema.etl_parse_errors += ":: golang:internal " + err.toString(); }
